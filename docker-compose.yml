@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  user_service:
+    build: ./services/user_service
+    ports:
+      - '5001:5000'
+      - '8000:8000'
+    networks:
+      - efk
+    platform: linux/arm64 # Specify platform
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - '9200:9200'
+    networks:
+      - efk
+    platform: linux/arm64 # Specify platform
+
+  fluentd:
+    build: ./fluentd
+    container_name: fluentd
+    volumes:
+      - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+    ports:
+      - '24224:24224'
+    networks:
+      - efk
+    platform: linux/arm64 # Specify platform
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    networks:
+      - efk
+    platform: linux/arm64 # Specify platform
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=im15im15 # Set a new password
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+    networks:
+      - efk
+    platform: linux/arm64
+
+networks:
+  efk:
+    driver: bridge

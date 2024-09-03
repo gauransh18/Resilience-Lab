@@ -1,0 +1,8 @@
+- name: Recover User Service
+  hosts: localhost
+  tasks:
+    - name: Restart user service container
+      docker_container:
+        name: user_service
+        state: started
+        restart_policy: always
