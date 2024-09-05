@@ -4,11 +4,16 @@ services:
   user_service:
     build: ./services/user_service
     ports:
-      - '5001:5000'
+      - '5001:5001'
       - '8000:8000'
     networks:
       - efk
     platform: linux/arm64 # Specify platform
+  
+  dashboard:
+    build: ./dashboard
+    ports:
+      - "8080:8080"
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.10.1
@@ -21,16 +26,24 @@ services:
       - efk
     platform: linux/arm64 # Specify platform
 
+  # fluentd:
+  #   build: ./fluentd
+  #   container_name: fluentd
+  #   volumes:
+  #     - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
+  #   ports:
+  #     - '24224:24224'
+  #   networks:
+  #     - efk
+  #   platform: linux/arm64 # Specify platform
+
   fluentd:
     build: ./fluentd
-    container_name: fluentd
+    ports:
+      - "24224:24224"
     volumes:
       - ./fluentd/fluent.conf:/fluentd/etc/fluent.conf
-    ports:
-      - '24224:24224'
-    networks:
-      - efk
-    platform: linux/arm64 # Specify platform
+    platform: linux/amd64
 
   grafana:
     image: grafana/grafana:latest
@@ -57,3 +70,5 @@ services:
 networks:
   efk:
     driver: bridge
+
+

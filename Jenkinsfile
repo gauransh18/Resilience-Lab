@@ -17,7 +17,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 script {
-                    docker.image('user_service').run('-p 5000:5000')
+                    docker.image('user_service').run('-p 5001:5001')
                 }
             }
         }
