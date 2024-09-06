@@ -23,5 +23,5 @@ create_order_response=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Conte
 if [ $create_order_response -eq 201 ]; then
     echo "Services interaction is healthy"
 else
-    echo "Services interaction failed, check logs for more details"
+    echo "Services interaction failed, check logs for more details or may be no more try :)"
 fi
