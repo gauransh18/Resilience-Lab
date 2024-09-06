@@ -7,6 +7,20 @@
 </head>
 <body>
     <h1>Welcome to the Dashboard</h1>
-    <p>This is where you can monitor your services.</p>
-</body>
-</html>
+    <div id="health-status">
+        <h2>Service Health</h2>
+        <p>User Service: <span id="user-health"></span></p>
+        <p>Order Service: <span id="order-health"></span></p>
+    </div>
+    <script>
+        function updateHealth() {
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('user-health').textContent = data.user_service;
+                    document.getElementById('order-health').textContent = data.order_service;
+                });
+        }
+        setInterval(updateHealth, 30000);
+        updateHealth();
+    </script>

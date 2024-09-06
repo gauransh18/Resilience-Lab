@@ -9,6 +9,15 @@ services:
     networks:
       - efk
     platform: linux/arm64
+
+  order_service:
+    build: ./services/order_service
+    ports:
+      - "5002:5002"
+      - "8001:8001"
+    networks:
+      - efk
+    platform: linux/arm64
   
   dashboard:
     build: ./dashboard

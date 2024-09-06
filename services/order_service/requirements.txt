@@ -1,0 +1,6 @@
+Flask
+prometheus_client
+waitress
+requests
+retrying
+pybreaker

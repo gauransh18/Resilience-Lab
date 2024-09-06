@@ -1,12 +1,25 @@
 #!/bin/bash
 
-# Randomly kill the user_service container
-container_name="resiliencelab-user_service-1"
+chaos_action() {
+    services=("resiliencelab-user_service-1" "resiliencelab-order_service-1" "dummy-service")
+    random_service=${services[$RANDOM % ${#services[@]}]}
+    
+    if [ "$random_service" == "dummy-service" ]; then
+        echo "dummy-service took one for the team"
+    else
+        echo "Killing $random_service"
+        docker kill $random_service
+    fi
+}
 
-# Check if the container is running
-if [ "$(docker ps -q -f name=$container_name)" ]; then
-    echo "Killing container: $container_name"
-    docker kill $container_name
-else
-    echo "Container $container_name is not running"
-fi
+for i in {1..5}
+do
+    echo "Running chaos experiment $i"
+    
+    chaos_action
+    
+    echo "Waiting for 1 minute before next experiment..."
+    sleep 60
+done
+
+echo "Chaos testing completed"

@@ -14,8 +14,6 @@ RUN buildDeps="sudo make gcc g++ libc-dev ruby-dev" \
  && apk del $buildDeps \
  && rm -rf /var/cache/apk/*
 
-# Copy configuration file
 COPY conf/fluent.conf /fluentd/etc/
 
-# Change the default user back to fluent
 USER fluent
