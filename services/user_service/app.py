@@ -1,7 +1,11 @@
 from flask import Flask, jsonify
 from prometheus_client import start_http_server, Summary, Counter, generate_latest
+import logging
 
 app = Flask(__name__)
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG)
 
 # Create a metric to track time spent and requests made.
 REQUEST_TIME = Summary('request_processing_seconds', 'Time spent processing request')
@@ -10,6 +14,7 @@ REQUEST_COUNT = Counter('request_count', 'Total request count')
 @app.route('/users', methods=['GET'])
 @REQUEST_TIME.time()
 def get_users():
+    app.logger.debug("Handling /users request")
     REQUEST_COUNT.inc()
     users = [
         {"id": 1, "name": "John Doe"},
@@ -26,5 +31,6 @@ def index():
     return "User Service is running!"
 
 if __name__ == '__main__':
+    from waitress import serve
     start_http_server(8000)  # Start Prometheus metrics server
-    app.run(host='0.0.0.0', port=5001)
+    serve(app, host='0.0.0.0', port=5001)

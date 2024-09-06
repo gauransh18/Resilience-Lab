@@ -1,8 +1,84 @@
+# - name: Recover User Service
+#   hosts: localhost
+#   tasks:
+#     - name: Stop user service container if running
+#       docker_container:
+#         name: user_service
+#         state: stopped
+#       ignore_errors: true
+
+#     - name: Restart user service container
+#       docker_container:
+#         name: user_service
+#         image: resiliencelab-user_service  
+#         state: started
+#         restart_policy: always
+        
+#     - name: Wait for the countainer to start
+#       pause:
+#         seconds: 30
+
+#     - name: Check user service container status
+#       command: docker ps -f name=user_service
+#       register: container_status
+
+#     - name: Print container status
+#       debug:
+#         var: container_status.stdout
+
+
 - name: Recover User Service
   hosts: localhost
   tasks:
+    - name: Stop user service container if running
+      docker_container:
+        name: user_service
+        state: stopped
+      ignore_errors: true
+
     - name: Restart user service container
       docker_container:
         name: user_service
+        image: resiliencelab-user_service
         state: started
         restart_policy: always
+
+    - name: Wait for the container to start
+      pause:
+        seconds: 30
+
+    - name: Get container logs
+      command: docker logs user_service
+      register: container_logs
+
+    - name: Print container logs
+      debug:
+        var: container_logs.stdout_lines
+
+    - name: Check container network
+      shell: docker inspect --format='{% raw %}{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}{% endraw %}' user_service
+      register: container_ip
+
+    - name: Print container IP
+      debug:
+        var: container_ip.stdout
+
+    - name: Test service from host
+      uri:
+        url: "http://localhost:5001/users"
+        return_content: yes
+      register: host_test
+      ignore_errors: true
+
+    - name: Print host test result
+      debug:
+        var: host_test
+
+    - name: Test service from within container
+      command: docker exec user_service curl -s http://localhost:5001/users
+      register: internal_test
+      ignore_errors: true
+
+    - name: Print internal test result
+      debug:
+        var: internal_test.stdout_lines

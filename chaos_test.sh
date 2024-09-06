@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# Randomly kill a container
-#!/bin/bash
+# Randomly kill the user_service container
+container_name="resiliencelab-user_service-1"
 
-# Randomly kill a container
-docker run -d --rm --name pumba gaiaadm/pumba pumba --interval 10s --random --log-level info kill --signal SIGKILL user_service
+# Check if the container is running
+if [ "$(docker ps -q -f name=$container_name)" ]; then
+    echo "Killing container: $container_name"
+    docker kill $container_name
+else
+    echo "Container $container_name is not running"
+fi
