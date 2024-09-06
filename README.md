@@ -2,10 +2,10 @@
 
 ## About the Project
 
-This project demonstrates a resilient microservices architecture with a focus on observability, fault tolerance, and chaos engineering. It consists of two main services (User Service and Order Service), a dashboard, and supporting infrastructure for monitoring and logging.
+This project demonstrates a flexible microservices architecture with an emphasis on observability. fault tolerance and chaos engineering It consists of two main services. (User Services and Order Services), Dashboards, and Supporting Infrastructure for Monitoring and Logging
 
 Key features:
-- Microservices built with Flask
+- Microservices built with Flask (python)
 - Docker containerization
 - Prometheus monitoring
 - Fluentd and Elasticsearch for logging
@@ -50,6 +50,8 @@ Key features:
 ## Logging
 
 Logs are collected using Fluentd and stored in Elasticsearch. You can visualize them using Kibana (if configured).
+
+Note: Elasticsearch, Fluentd, and Kibana have been initiated in the project. Full implementation and configuration details will be provided in future updates.
 
 ## Running Chaos Tests
 
@@ -126,8 +128,8 @@ To run services locally for development:
 
 ## Conclusion
 
-This Resilient Microservices Demo project showcases various aspects of building and maintaining a robust, fault-tolerant microservices architecture. By implementing features such as circuit breakers, retry mechanisms, and chaos testing, it demonstrates how to create a system that can withstand and recover from failures.
+This flexible microservices demo project demonstrates different aspects. of building and maintaining a robust and fault-tolerant microservices architecture. By using features such as circuit breakers Retry mechanism Chaos Test Shows how to create a system that can withstand and recover from failure.
 
-Feel free to explore the code, run the tests, and experiment with the system to gain hands-on experience with these concepts.
+Feel free to explore the code, run tests, and experiment with the system to gain hands-on experience with these concepts.
 
-Thank you for your interest in this project. If you have any questions or feedback, please don't hesitate to open an issue or reach out to me.
+Thank you for your interest in this project. If you have any questions or suggestions, Please feel free to open an issue or contact me.
